@@ -4,7 +4,7 @@
 #
 Name     : discover
 Version  : 0.4.0
-Release  : 14
+Release  : 15
 URL      : https://pypi.python.org/packages/source/d/discover/discover-0.4.0.tar.gz
 Source0  : https://pypi.python.org/packages/source/d/discover/discover-0.4.0.tar.gz
 Summary  : Test discovery for unittest. Backported from Python 2.7 for Python 2.4+
