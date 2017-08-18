@@ -4,22 +4,23 @@
 #
 Name     : discover
 Version  : 0.4.0
-Release  : 17
-URL      : https://pypi.python.org/packages/source/d/discover/discover-0.4.0.tar.gz
-Source0  : https://pypi.python.org/packages/source/d/discover/discover-0.4.0.tar.gz
+Release  : 18
+URL      : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
+Source0  : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Summary  : Test discovery for unittest. Backported from Python 2.7 for Python 2.4+
 Group    : Development/Tools
 License  : BSD-3-Clause
 Requires: discover-bin
 Requires: discover-python
+BuildRequires : pbr
+BuildRequires : pip
 BuildRequires : python-dev
 BuildRequires : python3-dev
 BuildRequires : setuptools
 
 %description
-This is the test discovery mechanism and ``load_tests`` protocol for unittest
-backported from Python 2.7 to work with Python 2.4 or more recent (including
-Python 3).
+backported from Python 2.7 to work with Python 2.4 or more recent (including 
+        Python 3).
 
 %package bin
 Summary: bin components for the discover package.
@@ -41,18 +42,27 @@ python components for the discover package.
 %setup -q -n discover-0.4.0
 
 %build
-python3 setup.py build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+export LANG=C
+export SOURCE_DATE_EPOCH=1503087163
+python2 setup.py build -b py2
+python3 setup.py build -b py3
 
 %check
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-%{__python} setup.py test
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+PYTHONPATH=%{buildroot}/usr/lib/python3.6/site-packages python3 setup.py test
 %install
+export SOURCE_DATE_EPOCH=1503087163
 rm -rf %{buildroot}
-python3 setup.py install --root=%{buildroot}
-python3 setup.py clean
-python setup.py build
-python setup.py install --root=%{buildroot}
+python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
+python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
+echo ----[ mark ]----
+cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
+echo ----[ mark ]----
 
 %files
 %defattr(-,root,root,-)
@@ -63,4 +73,5 @@ python setup.py install --root=%{buildroot}
 
 %files python
 %defattr(-,root,root,-)
-/usr/lib/python*/*
+/usr/lib/python2*/*
+/usr/lib/python3*/*
