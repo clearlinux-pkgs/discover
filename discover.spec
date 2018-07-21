@@ -4,7 +4,7 @@
 #
 Name     : discover
 Version  : 0.4.0
-Release  : 20
+Release  : 21
 URL      : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Source0  : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Summary  : Test discovery for unittest. Backported from Python 2.7 for Python 2.4+
@@ -57,7 +57,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1532209479
+export SOURCE_DATE_EPOCH=1532217360
 python3 setup.py build -b py3
 
 %check
