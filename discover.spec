@@ -4,17 +4,18 @@
 #
 Name     : discover
 Version  : 0.4.0
-Release  : 19
+Release  : 20
 URL      : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Source0  : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Summary  : Test discovery for unittest. Backported from Python 2.7 for Python 2.4+
 Group    : Development/Tools
 License  : BSD-3-Clause
 Requires: discover-bin
+Requires: discover-python3
 Requires: discover-python
+BuildRequires : buildreq-distutils3
 BuildRequires : pbr
 BuildRequires : pip
-BuildRequires : python-dev
 BuildRequires : python3-dev
 BuildRequires : setuptools
 
@@ -33,9 +34,19 @@ bin components for the discover package.
 %package python
 Summary: python components for the discover package.
 Group: Default
+Requires: discover-python3
 
 %description python
 python components for the discover package.
+
+
+%package python3
+Summary: python3 components for the discover package.
+Group: Default
+Requires: python3-core
+
+%description python3
+python3 components for the discover package.
 
 
 %prep
@@ -46,20 +57,17 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1503087163
-python2 setup.py build -b py2
+export SOURCE_DATE_EPOCH=1532209479
 python3 setup.py build -b py3
 
 %check
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-PYTHONPATH=%{buildroot}/usr/lib/python3.6/site-packages python3 setup.py test
+PYTHONPATH=%{buildroot}/usr/lib/python3.7/site-packages python3 setup.py test
 %install
-export SOURCE_DATE_EPOCH=1503087163
 rm -rf %{buildroot}
-python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
-python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
+python3 -tt setup.py build -b py3 install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
@@ -73,5 +81,7 @@ echo ----[ mark ]----
 
 %files python
 %defattr(-,root,root,-)
-/usr/lib/python2*/*
+
+%files python3
+%defattr(-,root,root,-)
 /usr/lib/python3*/*
