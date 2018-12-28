@@ -4,7 +4,7 @@
 #
 Name     : discover
 Version  : 0.4.0
-Release  : 21
+Release  : 22
 URL      : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Source0  : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Summary  : Test discovery for unittest. Backported from Python 2.7 for Python 2.4+
