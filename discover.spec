@@ -4,20 +4,16 @@
 #
 Name     : discover
 Version  : 0.4.0
-Release  : 25
+Release  : 26
 URL      : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Source0  : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Summary  : Test discovery for unittest. Backported from Python 2.7 for Python 2.4+
 Group    : Development/Tools
 License  : BSD-3-Clause
-Requires: discover-bin
-Requires: discover-python3
-Requires: discover-python
+Requires: discover-bin = %{version}-%{release}
+Requires: discover-python = %{version}-%{release}
+Requires: discover-python3 = %{version}-%{release}
 BuildRequires : buildreq-distutils3
-BuildRequires : pbr
-BuildRequires : pip
-BuildRequires : python3-dev
-BuildRequires : setuptools
 
 %description
 backported from Python 2.7 to work with Python 2.4 or more recent (including 
@@ -34,7 +30,7 @@ bin components for the discover package.
 %package python
 Summary: python components for the discover package.
 Group: Default
-Requires: discover-python3
+Requires: discover-python3 = %{version}-%{release}
 
 %description python
 python components for the discover package.
@@ -51,23 +47,31 @@ python3 components for the discover package.
 
 %prep
 %setup -q -n discover-0.4.0
+cd %{_builddir}/discover-0.4.0
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1532217360
-python3 setup.py build -b py3
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1576009509
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+export MAKEFLAGS=%{?_smp_mflags}
+python3 setup.py build
 
 %check
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-PYTHONPATH=%{buildroot}/usr/lib/python3.7/site-packages python3 setup.py test
+PYTHONPATH=%{buildroot}$(python -c "import sys; print(sys.path[-1])") python setup.py test
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
-python3 -tt setup.py build -b py3 install --root=%{buildroot}
+python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
