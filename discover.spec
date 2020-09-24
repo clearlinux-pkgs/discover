@@ -4,7 +4,7 @@
 #
 Name     : discover
 Version  : 0.4.0
-Release  : 28
+Release  : 29
 URL      : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Source0  : http://pypi.debian.net/discover/discover-0.4.0.tar.gz
 Summary  : KDE and Plasma resources management GUI
